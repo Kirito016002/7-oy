@@ -34,7 +34,10 @@ class Product(models.Model):
     def review(self):
         reviews = ProductReview.objects.filter(product_id=self.id)
         result = reduce(lambda result, x: result +x, reviews, 0)
-        result = result / reviews.count()
+        try:
+            result = result / reviews.count()
+        except ZeroDivisionError:
+            result = 0
         return result
     
     @property 
