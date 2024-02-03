@@ -59,14 +59,15 @@ def cart_create(request, id):
     else:
         cart = models.Cart.objects.get(is_active=True)
         try:
-            product = models.CartProduct.objects.get(card=cart)
+            item = models.Product.objects.get(id = id)
+            product = models.CartProduct.objects.get(product = item)
             product.quantity += 1
             product.save()
         except:
-            product = models.CartProduct.objects.get(id = id)
+            
             models.CartProduct.objects.create(
                 cart = cart,
-                product = product
+                product = item
             ) 
     return redirect('main:index')
 
@@ -81,9 +82,13 @@ def carts(request):
     return render(request, 'cart/carts.html', context)
 
 
-def cart_detail(request, id):
-    cart = models.Cart.objects.get(id=id)
-    items = models.CartProduct.objects.filter(card=cart)
+def cart_detail(request):
+    try:
+        cart = models.Cart.objects.get(id=id)
+        items = models.CartProduct.objects.filter(cart=cart)
+    except:
+        cart = models.Cart.objects.get(is_active=True, user=request.user)
+        items = models.CartProduct.objects.filter(cart=cart)
     context = {
         'cart':cart,
         'items':items
@@ -94,7 +99,10 @@ def cart_detail(request, id):
 def cart_detail_delete(request):
     item_id = request.GET['items_id']
     item = models.CartProduct.objects.get(id=item_id)
-    cart_id = item.card.id
-    item.delete()
-    return redirect('main:cart_detail', cart_id)
+    if item.quantity > 1:
+        item.quantity -= 1  
+        item.save()      
+    else:
+        item.delete()
+    return redirect('main:cart_detail')
 

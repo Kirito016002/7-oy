@@ -19,8 +19,8 @@
 				</ul>
                 {% for cart in active %}
 				<ul class="cart-header">
-						<li><span class="name">{{cart.quantity}}</span></li>
-						<li><span class="cost">{{cart.total_price}}</span></li>
+						<li><span class="name">{{cart.cart.quantity}}</span></li>
+						<li><span class="cost">{{cart.cart.total_price}}</span></li>
 					<div class="clearfix"> </div>
 				</ul>
                 {% endfor %}
@@ -34,8 +34,8 @@
 				</ul>
                 {% for cart in in_active %}
 				<ul class="cart-header">
-						<li><span class="name">{{cart.quantity}}</span></li>
-						<li><span class="cost">{{cart.total_price}}</span></li>
+						<li><span class="name">{{cart.cart.quantity}}</span></li>
+						<li><span class="cost">{{cart.cart.total_price}}</span></li>
 					<div class="clearfix"> </div>
 				</ul>
                 {% endfor %}
